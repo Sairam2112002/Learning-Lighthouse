@@ -85,7 +85,7 @@ const puppeteer = require('puppeteer');
     // Add table to Cart
     await lhFlow.startTimespan();
     {
-        await Promise.all([page.click(addToCartButton)]);
+        await page.click(addToCartButton);
     }
     await lhFlow.endTimespan();
 
