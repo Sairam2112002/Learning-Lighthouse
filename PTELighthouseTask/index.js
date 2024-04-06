@@ -7,6 +7,12 @@ const puppeteer = require('puppeteer');
     const timeout = 5000;
     page.setDefaultTimeout(timeout);
 
+    // URIs
+    const pteApplicationUri = "http://localhost/";
+
+    // Locators
+    const tablesSection = "li.page-item-13 > a";
+
     const lhApi = await import('lighthouse');
     const flags = {
         screenEmulation: {
@@ -30,28 +36,20 @@ const puppeteer = require('puppeteer');
     // Opening Performance Testing Essentials Application
     await lhFlow.startNavigation();
     {
-        const targetPage = page;
-        const promises = [];
-        const startWaitingForEvents = () => {
-            promises.push(targetPage.waitForNavigation());
-        }
-        startWaitingForEvents();
-        await targetPage.goto('http://localhost/');
-        await Promise.all(promises);
+        await Promise.all([
+            page.waitForNavigation(),
+            page.goto(pteApplicationUri)
+        ]);
     }
     await lhFlow.endNavigation();
 
     // Navigate to "Tables" Section
     await lhFlow.startNavigation();
-    {
-        const targetPage = page;
-        const promises = [];
-        const startWaitingForEvents = () => {
-            promises.push(targetPage.waitForNavigation());
-        }
-        const tablesElement = "li.page-item-13 > a";
-        await targetPage.click(tablesElement);
-        await Promise.all(promises);
+    { 
+        await Promise.all([
+            page.waitForNavigation(),
+            page.click(tablesSection)
+          ]);
     }
     await lhFlow.endNavigation();
     
