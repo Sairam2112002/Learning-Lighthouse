@@ -1,0 +1,34 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', 
+                url: 'https://github.com/Sairam2112002/Learning-Lighthouse.git'
+            }
+        }
+        
+        stage('Setup dependencies') {
+            steps {
+                dir('PTELighthouseTask') {
+                    bat 'npm ci'
+                }
+            }
+        }
+    
+        stage('Run Lighthouse test') {
+            steps {
+                dir('PTELighthouseTask') {
+                    bat 'node index.js'
+                }
+            }
+        }
+    
+        stage('Archive HTML Report') {
+            steps {
+                archiveArtifacts artifacts: """PTELighthouseTask/lighthouseReport.html"""
+            }
+        }
+    }
+}
