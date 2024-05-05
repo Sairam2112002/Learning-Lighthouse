@@ -119,7 +119,11 @@ const puppeteer = require('puppeteer');
         await page.type(cityInputField, "Hogsmeade");
         await page.select(countryDropdown, countryToSelect);
 
-        await page.waitForSelector(stateDropdown);
+        await page.waitForFunction(
+            selector => document.querySelector(selector).children.length > 1,
+            {timeout: 5000},
+            stateDropdown
+        );
         await page.select(stateDropdown, stateToSelect);
 
         await page.type(phoneInputField, "1234567890");
